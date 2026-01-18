@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: n8n-ffmpeg
+    env: docker
+    region: oregon
+    plan: starter
+
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+
+    envVars:
+      - key: PORT
+        value: "5678"
+      - key: N8N_PORT
+        value: "5678"
+
+      # IMPORTANT pour community nodes
+      - key: N8N_REINSTALL_MISSING_PACKAGES
+        value: "true"
+
+    healthCheckPath: /healthz
