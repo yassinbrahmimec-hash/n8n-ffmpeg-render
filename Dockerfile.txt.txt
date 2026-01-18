@@ -1,6 +1,27 @@
+# Base officielle n8n
 FROM n8nio/n8n:latest
+
+# Passer en root pour installer FFmpeg
 USER root
+
+# Installer FFmpeg sans cache inutile
 RUN apk update && \
     apk add --no-cache ffmpeg && \
     rm -rf /var/cache/apk/*
-# installer des nœuds supplémentaires
+
+# Créer un dossier pour les community nodes
+RUN mkdir -p /custom && chown node:node /custom
+
+# Revenir à l'utilisateur sécurisé
+USER node
+
+# Installer les community nodes
+WORKDIR /custom
+RUN npm init -y && \
+    npm install \
+      @blotato/n8n-nodes-blotato \
+      n8n-nodes-puppeteer-extended
+
+# Revenir au dossier n8n
+WORKDIR /usr/local/lib/node_modules/n8n
+
